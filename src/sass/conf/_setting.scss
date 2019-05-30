@@ -1,0 +1,71 @@
+@charset "utf-8";
+
+
+/*----------------------------------------*/
+/* [環境変数を取得して変数を切り分ける] */
+
+$env: get-env();
+
+/*
+@if ($env == 'production'){
+	
+}
+*/
+
+
+
+/*----------------------------------------*/
+/* [共通変数] */
+
+/**
+ * reset.scssの設定
+ */
+$reset-type: html5;
+
+/**
+ * BreakPoint
+ * @include mq($pc){CSS設定}
+ */
+$pc: 'screen and (min-width: 769px)';
+
+/**
+ * body背景色
+ */
+$body-color:#FFF;
+
+/**
+ * max-widthのサイズ
+ */
+$max-width: 1280px;
+ 
+/**
+ * フォントファミリー
+ */
+$font-family: '-apple-system','BlinkMacSystemFont','Hiragino Sans','Hiragino Kaku Gothic ProN','segoe ui','游ゴシック  Medium','メイリオ',Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;
+
+/**
+ * 文字色
+ */
+$font-baseColor: #000;
+
+/**
+ * 文字サイズ
+ */
+$font-baseSize: 16px;
+
+/**
+ * 行間
+ */
+$font-baseLine: 1.5;
+
+
+
+/*----------------------------------------*/
+/* Asset Directory */
+
+// Common Image Directory
+$imgdir_common: '../img/common/';
+
+// Top Image Directory
+$imgdir_top: '../img/top/';
+

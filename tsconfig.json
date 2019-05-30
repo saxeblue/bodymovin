@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es5", 
+        "module": "es2015",
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "removeComments": true,
+        "noEmitOnError": false,
+        "lib": ["es2018", "dom"],
+        "sourceMap": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "./node_modules"
+    ],
+    "compileOnSave": false
+}
+

@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+
+
+/*----------------------------------------*/
+/* [BASE SETTING] */
+
+html{
+    background: transparent;
+    line-height: $font-baseLine;
+}
+
+
+body{
+    font-family: $font-family;
+    color: $font-baseColor;
+    background-color: $body-color;
+    -webkit-text-size-adjust: 100%;
+}
+
+
+img{
+	width: 100%;
+    vertical-align: bottom;
+}
+
+
+a, a img{
+    outline: none;
+}
+
+
+::selection{
+
+}
+
+
+
+

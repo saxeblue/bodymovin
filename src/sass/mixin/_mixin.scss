@@ -1,0 +1,554 @@
+@charset "utf-8";
+
+
+/**
+ * メディアクエリ
+ * $breakpoint: tablet or pcS or pcL (conf/_setting.scss)
+ * 
+ * #wrapper{
+ *  @include mq($tablet){CSS設定}
+ * }
+ * 
+ */
+@mixin mq($breakpoint){
+    @media #{$breakpoint}{
+        @content;
+    }
+}
+
+
+/**
+ * BEM Elements
+ * 
+ * @include be(element1){CSS設定};
+ * @include be(element1, element2){CSS設定};
+ */
+@mixin be($names...){
+
+    @each $name in $names{
+        &__#{$name}{
+            @content;
+        }
+    }
+}
+
+
+/**
+ * BEM Modifiers
+ * 
+ * @include bm(modifier1){CSS設定};
+ * @include bm(modifier1, modifier2){CSS設定};
+ */
+@mixin bm($names...){
+
+    @each $name in $names{
+        &--#{$name} {
+            @content;
+        }
+    }
+}
+
+
+/**
+ * Flexで横並びにする
+ */
+@mixin fxLine($horizon:left){
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: $horizon;
+}
+
+
+/**
+ * inline-blockで横並びにする
+ */
+@mixin ibLine($horizon:left){
+    letter-spacing: -0.4em;
+    text-align: $horizon;
+
+    & > *{
+        display: inline-block;
+        letter-spacing: normal;
+    }
+}
+
+
+/**
+ * Flexで縦横中央揃え
+ */
+@mixin fxCenter(){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/**
+ * ブロックのパーセント幅を設定
+ * @include perWidth(350, 750)
+ */
+@mixin perWidth($self, $owner){
+    width: ($self / $owner) * 100%;
+}
+
+
+/**
+ * pxをvwに変換
+ */
+@function PxToVw($size, $viewport){
+    $rate: 100 / $viewport;
+    @return $rate * $size * 1vw;
+}
+
+
+/**
+ * REM FONT
+ */
+@mixin remFont($size, $lh:1.5, $fw:normal, $color:$font-baseColor){
+	font-size:$size + px;
+	font-size: ($size / 16) * 1rem;
+    line-height: $lh;
+    font-weight: $fw;
+    color: $color;
+}
+
+
+/**
+ * Viewport sized typography with minimum and maximum values
+ * @author Eduardo Boucas (@eduardoboucas)
+ * @param {Number}   $responsive  - Viewport-based size
+ * @param {Number}   $min         - Minimum font size (px)
+ * @param {Number}   $max         - Maximum font size (px)(optional)
+ * @param {Number}   $fallback    - Fallback for viewport-based units (optional)
+ * 
+ * @example scss - 5vw font size (with 50px fallback), minumum of 35px and maximum of 150px
+ * @include vwFont(5vw, 35px, 150px, 50px);
+ */
+@mixin vwFont($responsive, $min, $max:false, $fallback:false){
+    $responsive-unitless: $responsive / ($responsive - $responsive + 1);
+    $dimension: if(unit($responsive) == 'vh', 'height', 'width');
+    $min-breakpoint: $min / $responsive-unitless * 100;
+
+    @media (max-#{$dimension}: #{$min-breakpoint}) {
+        font-size: $min;
+    }
+
+    @if $max {
+        $max-breakpoint: $max / $responsive-unitless * 100;
+
+        @media (min-#{$dimension}: #{$max-breakpoint}) {
+            font-size: $max;
+        }
+    }
+
+    @if $fallback {
+        font-size: $fallback;
+    }
+
+    font-size: $responsive;
+}
+
+
+/**
+ * 擬似要素を作成する
+ * @include after(){ 追加するCSS }
+ */
+@mixin after($content:'', $display:block, $position:absolute){
+
+    &::after{
+        content: $content;
+        display: $display;
+        position: $position;
+        @content;
+    }
+}
+
+@mixin before($content:'', $display:block, $position:absolute){
+
+    &::before{
+        content: $content;
+        display: $display;
+        position: $position;
+        @content;
+    }
+}
+
+
+/**
+ * ブロックの縦横比をpaddingで保持する
+ * @include ratioBox(640, 360)
+ */
+@mixin ratioBox($width, $height){
+    display: block;
+    width: 100%;
+    height: 0;
+    padding-top: ($height / $width) * 100%;
+}
+
+
+/**
+ * 背景画像
+ */
+@mixin bg($img, $size:100% auto, $repeat:no-repeat, $pos:null, $color:null){
+    background-image: url($img);
+    background-size: $size;
+    background-repeat: $repeat;
+
+    @if $position != null{
+        background-position: $pos;
+    }
+    @if $color != null{
+        background-color: $color;
+    }
+}
+
+
+/**
+ * position:absolute
+ */
+@mixin absolute($top:null, $right:null, $bottom:null, $left:null){
+    position: absolute;
+
+    @if $top != null{
+        top: $top;
+    }
+    @if $right != null{
+        right: $right;
+    }
+    @if $bottom != null{
+        bottom: $bottom;
+    }
+    @if $left != null{
+        left: $left;
+    }
+}
+
+
+/**
+ * position:fixed
+ */
+@mixin fixed($top:null, $right:null, $bottom:null, $left:null){
+    position: fixed;
+
+    @if $top != null{
+        top: $top;
+    }
+    @if $right != null{
+        right: $right;
+    }
+    @if $bottom != null{
+        bottom: $bottom;
+    }
+    @if $left != null{
+        left: $left;
+    }
+}
+
+
+
+/**
+ * グラデーション
+ */
+@mixin gradient($deg:90deg, $startColor:rgba(0,0,0,0), $endColor:rgba(0,0,0,1), $startpos:0, $endpos:100%){
+	background: linear-gradient($deg,  $startColor $startpos, $endColor $endpos);
+}
+
+
+/**
+ * テキスト飛ばし
+ */
+@mixin ir(){
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+
+
+/*----------------------------------------------------------------------*/
+/* Animation */
+
+/**
+ * ロールオーバーでopacity
+ */
+@mixin HoverOpacity($opacity:0.8, $duration:0.3s, $easing:$EaseOut_Quart){
+    transition: all $duration $easing;
+
+    &:hover{
+        opacity: $opacity;
+    }
+}
+
+
+/**
+ * ロールオーバーで下線が伸びる
+ */
+@mixin HoverLine($txtHoverColor:#FF0000, $lineHoverColor:#FF0000, $duration:0.3s, $easing:$EaseOut_Quart){
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    transition: all $duration $easing;
+
+
+    &::after{
+        content: '';
+        display: block;
+        width:0; height: 1px;
+        opacity: 0;
+        background-color: $lineHoverColor;
+        transition: all $duration $easing;
+    }
+
+    &:hover{
+        color: $txtHoverColor;
+
+        &::after{
+            width:100%;
+            opacity: 1;
+        }
+    }
+}
+
+
+/**
+ * ロールオーバーでドロップシャドウ
+ */
+@mixin HoverDropshadow($x:0, $y:-2px, $radius:8px, $color:rgba(0, 166, 233, 0.4), $duration:0.4s, $easing:$EaseOut_Quart){
+    transition: all $duration $easing;
+
+    &:hover{
+        filter: drop-shadow($x $y $radius $color);
+    }
+}
+
+
+/**
+ * ロールオーバーで画像の4辺に枠線が伸びる
+ * <div><a><span><img src=""></span></a></div>
+ * <div>は、width指定もしくはdisplay:inline-block
+ */
+@mixin HoverSqBorderExtend($borderColor:#000, $borderThick:1px, $duration:0.3s, $easing:$EaseOut_Quart){
+    position: relative;
+    
+    img{
+        display: block;
+    }
+    
+    a{
+        position: relative;
+        display: inline-block;
+        
+        &::before, &::after, span::before, span::after{
+            content: '';
+            display: block;
+            position: absolute;
+            background: $borderColor;
+            pointer-events: none;
+            transition: all $duration $easing;
+        }
+
+        &::before{
+            left:0; bottom:0;
+            width: $borderThick; height: 0;
+            z-index: 1;
+        }
+
+        &::after{
+            left:0; top:0;
+            width: 0; height: $borderThick;
+        }
+        
+        span{
+            position: relative;
+            display: inline-block;
+            
+            &::before{
+                right:0; top:0;
+                width: $borderThick; height: 0;
+                z-index: 2;
+            }
+            &::after{
+                right:0; bottom:0;
+                width: 0; height: $borderThick;
+            }
+        }
+        
+        &:hover{
+
+            &::before, span::before{
+            	height: 100%;
+            }
+            &::after, span::after{
+            	width: 100%;
+            }
+        }
+    }
+}
+
+
+/**
+ * ロールオーバーで枠線が太くなる
+ * <div><a><img src=""></a></div>
+ * <div>は、width指定もしくはdisplay:inline-block
+ */
+@mixin HoverSqBorderThick($borderColor:#000, $borderHoverThick:3px, $duration:0.3s, $easing:$EaseOut_Quart){
+    
+    a{
+        position: relative;
+        display: inline-block;
+        
+        &::after{
+            content: '';
+            display: block;
+            width: 100%; height: 100%;
+            box-sizing: border-box;
+            position: absolute;
+            left:0; top:0;
+            border:0 solid $borderColor;
+            z-index: 2;
+            transition: all $duration $EaseOut_Quart;
+        }
+        
+        &:hover::after{
+            border:$borderHoverThick solid $borderColor;
+        }
+    }
+}
+
+
+/**
+ * ロールオーバーでマーカーが伸びる(ver.1行)
+ */
+@mixin HoverMarker($hoverColor, $markerColor, $duration:0.5s, $easing:$EaseOut_Quart){
+    
+    a{
+        position: relative;
+        display: inline-block;
+        padding: 3px;
+        text-decoration: none;
+        transition: all $duration $easing;
+        
+        &::before{
+            content: '';
+            display: block;
+            width:0; height: 100%;
+            position: absolute;
+            top:0;
+            z-index: -1;
+            opacity: 0;
+            background-color: $markerColor;
+            transition: all $duration $easing;  
+        }
+        
+        &:hover{
+            color:$hoverColor;
+            
+            &::before{
+                width:100%;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+
+/**
+ * ロールオーバーで揺らす
+ */
+@mixin HoverShake($duration:0.5s, $easing:linear){
+	display: block;
+
+	&:hover{
+		animation: shakeAction $duration 1 $easing;
+		animation-fill-mode:forwards;
+	}
+}
+@keyframes shakeAction{
+	0% {
+		transform: rotate(1.2deg);
+	}
+    20% {
+    	transform: rotate(-0.8deg);
+    }
+    40% {
+    	transform: rotate(0.4deg);
+    }
+    60% {
+    	transform: rotate(-0.75deg);
+    }
+    70% {
+    	transform: rotate(0.375deg);
+    }
+    80% {
+    	transform: rotate(-0.25deg);
+    }
+    90% {
+    	transform: rotate(0.125deg);
+    }
+    100% {
+    	transform: rotate(0);
+    }
+}
+
+@mixin HoverShakeHard($duration:0.5s, $easing:linear){
+	display: block;
+
+	&:hover{
+		animation: shakeActionHard $duration 1 $easing;
+		animation-fill-mode:forwards;
+	}
+}
+@keyframes shakeActionHard{
+	0% {
+		transform: rotate(2.4deg);
+	}
+    20% {
+    	transform: rotate(-1.6deg);
+    }
+    40% {
+    	transform: rotate(0.8deg);
+    }
+    60% {
+    	transform: rotate(-1.5deg);
+    }
+    70% {
+    	transform: rotate(0.7deg);
+    }
+    80% {
+    	transform: rotate(-0.5deg);
+    }
+    90% {
+    	transform: rotate(0.25deg);
+    }
+    100% {
+    	transform: rotate(0);
+    }
+}
+
+
+/**
+ * スノーノイズ
+ */
+@mixin snowNoise($noiseUrl, $opacity:0.2, $duration:0.5s){
+    width: 100%;
+    height: 100%;
+    background: url($noiseUrl);
+    opacity: $opacity;
+    animation: snowNoiseFrame $duration infinite linear;
+}
+@keyframes snowNoiseFrame{
+    0%{
+        background-position:50px 0;
+    }
+    40%{
+        background-position: 10px 50%;
+    }
+    80%{
+        background-position:300px 100%;
+    }
+    100%{
+        background-position: 0 0;
+    }
+}
+
